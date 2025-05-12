@@ -73,6 +73,12 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton.setOnClickListener(v -> loginUser());
         googleSignInButton.setOnClickListener(v -> signInWithGoogle());
+        
+        // Kayıt ol butonuna tıklandığında RegisterActivity'ye yönlendir
+        findViewById(R.id.registerTextView).setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            finish();
+        });
     }
 
     private void signInWithGoogle() {
