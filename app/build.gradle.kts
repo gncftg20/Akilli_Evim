@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(platform(libs.firebase.bom.v3272))
+    implementation("com.google.firebase:firebase-auth")
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.database)
     implementation(libs.navigation.fragment)

@@ -21,8 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AkilliEvim" >
         <activity
-        android:name=".EspWifiConfigActivity"
-        android:exported="true"
+            android:name=".EspWifiConfigActivity"
+            android:exported="true"
             android:theme="@style/Theme.AkilliEvim" />
         <activity
             android:name=".MainActivity"
@@ -34,7 +34,9 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
 </manifest>

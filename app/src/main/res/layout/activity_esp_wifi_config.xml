@@ -32,6 +32,27 @@
         android:layout_marginBottom="16dp"
         android:text="Cihazları Tara" />
 
+    <Button
+        android:id="@+id/buttonScanWifi"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="WiFi Ağlarını Tara" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bulunan WiFi Ağları:"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <ListView
+        android:id="@+id/wifiListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

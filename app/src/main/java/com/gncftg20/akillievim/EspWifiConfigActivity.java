@@ -10,6 +10,10 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Button;
@@ -22,6 +26,8 @@ import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import android.net.wifi.WifiManager;
+import android.net.wifi.ScanResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +40,13 @@ public class EspWifiConfigActivity extends AppCompatActivity {
             Manifest.permission.BLUETOOTH_SCAN,
             Manifest.permission.BLUETOOTH_CONNECT,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.BLUETOOTH_ADVERTISE
+            Manifest.permission.BLUETOOTH_ADVERTISE,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.CHANGE_WIFI_STATE
     };
+
+    private static final int WIFI_PERMISSION_REQUEST_CODE = 2;
+
 
     private BluetoothLeScanner bluetoothLeScanner;
     private BluetoothGatt bluetoothGatt;
@@ -43,6 +54,11 @@ public class EspWifiConfigActivity extends AppCompatActivity {
     private ArrayAdapter<String> deviceListAdapter;
     private List<BluetoothDevice> deviceList;
 
+    private ListView wifiListView;
+    private ArrayAdapter<String> wifiListAdapter;
+    private List<android.net.wifi.ScanResult> wifiList;
+    private Button buttonScanWifi;
+    private WifiManager wifiManager;
     private static final UUID WIFI_SERVICE_UUID = UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
     private static final UUID WIFI_SSID_CHARACTERISTIC_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a8");
     private static final UUID WIFI_PASSWORD_CHARACTERISTIC_UUID = UUID.fromString("beb5483e-36e1-4688-b7f5-ea07361b26a9");
@@ -75,6 +91,20 @@ public class EspWifiConfigActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSION_REQUEST_CODE);
     }
 
+    private boolean checkWifiPermissions() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestWifiPermissions() {
+        ActivityCompat.requestPermissions(this, new String[] {
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        }, WIFI_PERMISSION_REQUEST_CODE);
+    }
+
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
     private void initializeBluetooth() {
         var bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -100,6 +130,13 @@ public class EspWifiConfigActivity extends AppCompatActivity {
         Button buttonConnect = findViewById(R.id.buttonConnect);
         editTextSSID = findViewById(R.id.editTextSSID);
         editTextPassword = findViewById(R.id.editTextPassword);
+        buttonScanWifi = findViewById(R.id.buttonScanWifi);
+        wifiListView = findViewById(R.id.wifiListView);
+
+        wifiList = new ArrayList<>();
+        wifiListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
+        wifiListView.setAdapter(wifiListAdapter);
+
         ListView deviceListView = findViewById(R.id.deviceListView);
 
         deviceListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
@@ -120,6 +157,19 @@ public class EspWifiConfigActivity extends AppCompatActivity {
                 startScanningForBLEDevices();
             } else {
                 requestPermissions();
+            }
+        });
+
+        wifiListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (position < wifiList.size()) {
+                android.net.wifi.ScanResult wifi = wifiList.get(position);
+                editTextSSID.setText(wifi.SSID);
+            }
+        });
+
+        buttonScanWifi.setOnClickListener(v -> {
+            if (checkWifiPermissions()) {
+                startScanningForWifiNetworks();
             }
         });
     }
@@ -156,6 +206,18 @@ public class EspWifiConfigActivity extends AppCompatActivity {
         bluetoothLeScanner.startScan(scanCallback);
     }
 
+    private void startScanningForWifiNetworks() {
+        wifiList.clear();
+        wifiListAdapter.clear();
+
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (wifiManager != null && wifiManager.isWifiEnabled()) {
+            wifiManager.startScan();
+            Toast.makeText(this, "WiFi ağları taranıyor...", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "WiFi etkin değil veya WiFi servisine erişilemiyor", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -231,6 +293,35 @@ public class EspWifiConfigActivity extends AppCompatActivity {
         }
     }
 
+    private final BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(intent.getAction())) {
+                if (wifiManager != null) {
+                    List<android.net.wifi.ScanResult> results = wifiManager.getScanResults();
+                    wifiList.clear();
+                    wifiListAdapter.clear();
+                    for (android.net.wifi.ScanResult scanResult : results) {
+                        wifiList.add(scanResult);
+                        wifiListAdapter.add(scanResult.SSID);
+                    }
+                    wifiListAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(wifiScanReceiver);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
