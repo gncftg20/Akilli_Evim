@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "446189604516",
+    "firebase_url": "https://esp32-4d97e-default-rtdb.firebaseio.com",
+    "project_id": "esp32-4d97e",
+    "storage_bucket": "esp32-4d97e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446189604516:android:31a8429c603b43c9e4e031",
+        "android_client_info": {
+          "package_name": "com.gncftg20.akillievim"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKbClIvNrmJdzq5Gy97MI6mssqk31A77o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
