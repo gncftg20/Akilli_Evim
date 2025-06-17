@@ -4,6 +4,8 @@ androidxJunit = "1.1.5"
 circularseekbar = "1.4"
 firebaseBom = "33.13.0"
 firebaseBomVersion = "32.7.2"
+firebaseUiAuth = "9.0.0"
+firebaseUiDatabase = "9.0.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -18,9 +20,12 @@ navigationUi = "2.9.0"
 [libraries]
 circularseekbar = { module = "com.devadvance:circularseekbar", version.ref = "circularseekbar" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-bom-v3272 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-database = { module = "com.google.firebase:firebase-database" }
+firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseUiAuth" }
+firebase-ui-database = { module = "com.firebaseui:firebase-ui-database", version.ref = "firebaseUiDatabase" }
 google-firebase-database = { module = "com.google.firebase:firebase-database" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -43,8 +43,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(platform(libs.firebase.bom.v3272))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation(libs.firebase.auth)
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.database)
     implementation(libs.navigation.fragment)
@@ -52,6 +52,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.v115)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.github.anastr:speedviewlib:1.6.1")
+    implementation (libs.firebase.ui.database)
+    implementation (libs.firebase.ui.auth)
+    implementation ("com.squareup.okhttp3:okhttp:4.9.3")
+
+
 
 }

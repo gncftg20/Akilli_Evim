@@ -1,42 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="?attr/colorSurface">
 
-    <EditText
-        android:id="@+id/editTextSSID"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:hint="WiFi SSID" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_anchor="@+id/appbar"
+        app:layout_anchorGravity="center">
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:hint="WiFi Şifresi"
-        android:inputType="textPassword" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin" />
 
-    <Button
-        android:id="@+id/buttonScan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ağları Tara" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Akıllı Ev Kontrolü"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
 
-    <ListView
-        android:id="@+id/wifiListView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        <!-- Başlık -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESP32 WiFi Yapılandırma"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorPrimary"
+            android:layout_marginBottom="24dp"/>
 
-    <Button
-        android:id="@+id/buttonSend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ESP32'ye Gönder" />
-    <Button
-        android:id="@+id/buttonFetchFromEsp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ESP32 Ağlarını Gör" />
-</LinearLayout>
+        <!-- Kullanıcı Bilgileri Kartı -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kullanıcı Bilgileri"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/textViewUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/textViewUserEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/textViewUserUid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextUserPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="59dp"
+                    android:hint="Kullanıcı Şifresi"
+                    android:inputType="textPassword" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- WiFi Bilgileri Kartı -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WiFi Bilgileri"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:id="@+id/textViewWifiSsid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:textSize="16sp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextWifiPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="66dp"
+                        android:hint="WiFi Şifresi"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Butonlar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonScan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="WiFi Tara"
+                android:layout_marginEnd="8dp"
+                app:cornerRadius="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Gönder"
+                android:layout_marginStart="8dp"
+                app:cornerRadius="8dp"/>
+        </LinearLayout>
+
+        <!-- WiFi Listesi Kartı -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="271dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="Mevcut WiFi Ağları"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/wifiRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scrollbars="vertical"
+                    android:fadeScrollbars="false"
+                    android:clipToPadding="false"
+                    android:paddingBottom="8dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- İlerleme Çubuğu -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+</ScrollView>
