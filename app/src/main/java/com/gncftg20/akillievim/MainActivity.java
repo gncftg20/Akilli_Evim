@@ -198,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // TextView'a tıklandığında ismi güncelle
         textView.setOnClickListener(v -> {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
             builder.setTitle("Cihaz Adını Değiştir");

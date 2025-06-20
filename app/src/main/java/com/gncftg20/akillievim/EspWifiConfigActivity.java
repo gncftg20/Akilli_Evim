@@ -206,28 +206,27 @@ public class EspWifiConfigActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         String email = user.getEmail();
         if (email != null) {
-            auth.signInWithEmailAndPassword(email, userPassword)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        databaseRef.child(auth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                User userData = snapshot.getValue(User.class);
-                                if (userData != null) {
-                                    sendToEsp32(ssid, password, userData);
-                                }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                showToast("Kullanıcı bilgileri alınamadı");
-                            }
-                        });
-                    } else {
-                        showToast("Kullanıcı şifresi hatalı");
+                databaseRef.child(Objects.requireNonNull(auth.getUid())).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User userData = snapshot.getValue(User.class);
+                        if (userData != null) {
+                            sendToEsp32(ssid, password, userData);
+                        }
                     }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        showToast("Kullanıcı bilgileri alınamadı");
+                    }
+
                 });
+
+        } else {
+            showToast("E-posta alınamadı");
         }
+
     }
 
     private void sendToEsp32(String ssid, String password, User user) {
